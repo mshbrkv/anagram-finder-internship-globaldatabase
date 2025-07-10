@@ -19,6 +19,7 @@ public class AnagramFinderInternshipGlobaldatabaseApplication {
         final Map<String, List<String>> anagrams = fileService.findAnagrams(words);
 
         fileService.printAnagrams(anagrams);
+
         SpringApplication.run(AnagramFinderInternshipGlobaldatabaseApplication.class, args);
     }
 

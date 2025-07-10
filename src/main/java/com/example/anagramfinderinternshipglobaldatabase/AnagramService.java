@@ -1,25 +1,17 @@
 package com.example.anagramfinderinternshipglobaldatabase;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class AnagramService {
 
 
-
     public Map<String, List<String>> findAnagrams(List<String> words) {
 
         return words.stream()
-                    .collect(Collectors.groupingBy(word -> {
-                        char[] chars = word.toCharArray();
-                        Arrays.sort(chars);
-                        return new String(chars);
-                    }));
+                    .collect(Collectors.groupingBy(this::sortChars, TreeMap::new, sortedListCollector()));
+
     }
 
     public void printAnagrams(Map<String, List<String>> anagrams) {
@@ -28,5 +20,21 @@ public class AnagramService {
             System.out.println(String.join(" ", group));
         });
     }
+
+    private String sortChars(String word) {
+
+        char[] chars = word.toCharArray();
+        Arrays.sort(chars);
+        return new String(chars);
+    }
+
+    private Collector<String, ?, List<String>> sortedListCollector() {
+
+        return Collectors.collectingAndThen(
+                Collectors.toCollection(TreeSet::new),
+                ArrayList::new
+        );
+    }
+
 
 }
